@@ -10,8 +10,10 @@ import "./protocols/curve/ICurvePool.sol";
 contract SimulatorV1 {
     using SafeMath for uint256;
 
-    address public UNISWAP_V2_FACTORY = 0x5757371414417b8C6CAad45bAeF941aBc7d3Ab32;
-    address public UNISWAP_V3_QUOTER2 = 0x61fFE014bA17989E743c5F6cB21bF9697530B21e;
+    address public UNISWAP_V2_FACTORY =
+        0x5757371414417b8C6CAad45bAeF941aBc7d3Ab32;
+    address public UNISWAP_V3_QUOTER2 =
+        0x61fFE014bA17989E743c5F6cB21bF9697530B21e;
 
     struct SwapParams {
         uint8 protocol;
@@ -24,10 +26,13 @@ contract SimulatorV1 {
 
     constructor() {}
 
-    function simulateSwapIn(SwapParams[] memory paramsArray) public returns (uint256) {
+    function simulateSwapIn(
+        SwapParams[] memory paramsArray
+    ) public returns (uint256) {
         uint256 amountOut = 0;
+        uint256 paramsArrayLength = paramsArray.length;
 
-        for (uint256 i; i < paramsArray.length - 1;) {
+        for (uint256 i; i < paramsArrayLength; ) {
             SwapParams memory params = paramsArray[i];
 
             if (amountOut == 0) {
@@ -52,7 +57,9 @@ contract SimulatorV1 {
         return amountOut;
     }
 
-    function simulateUniswapV2SwapIn(SwapParams memory params) public returns (uint256 amountOut) {
+    function simulateUniswapV2SwapIn(
+        SwapParams memory params
+    ) public returns (uint256 amountOut) {
         (uint reserveIn, uint reserveOut) = UniswapV2Library.getReserves(
             UNISWAP_V2_FACTORY,
             params.tokenIn,
@@ -65,7 +72,9 @@ contract SimulatorV1 {
         );
     }
 
-    function simulateUniswapV3SwapIn(SwapParams memory params) public returns (uint256 amountOut) {
+    function simulateUniswapV3SwapIn(
+        SwapParams memory params
+    ) public returns (uint256 amountOut) {
         IQuoterV2 quoter = IQuoterV2(UNISWAP_V3_QUOTER2);
         IQuoterV2.QuoteExactInputSingleParams memory quoterParams;
         quoterParams.tokenIn = params.tokenIn;
@@ -73,10 +82,12 @@ contract SimulatorV1 {
         quoterParams.amountIn = params.amount;
         quoterParams.fee = params.fee;
         quoterParams.sqrtPriceLimitX96 = 0;
-        (amountOut,,,) = quoter.quoteExactInputSingle(quoterParams);
+        (amountOut, , , ) = quoter.quoteExactInputSingle(quoterParams);
     }
 
-    function simulateCurveSwapIn(SwapParams memory params) public returns (uint256 amountOut) {
+    function simulateCurveSwapIn(
+        SwapParams memory params
+    ) public returns (uint256 amountOut) {
         ICurvePool pool = ICurvePool(params.pool);
 
         int128 i = 0;
@@ -102,10 +113,6 @@ contract SimulatorV1 {
             }
         }
 
-        amountOut = ICurvePool(params.pool).get_dy(
-            i,
-            j,
-            params.amount
-        );
+        amountOut = ICurvePool(params.pool).get_dy(i, j, params.amount);
     }
 }

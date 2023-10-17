@@ -59,7 +59,7 @@ contract SimulatorV1 {
 
     function simulateUniswapV2SwapIn(
         SwapParams memory params
-    ) public returns (uint256 amountOut) {
+    ) public view returns (uint256 amountOut) {
         (uint reserveIn, uint reserveOut) = UniswapV2Library.getReserves(
             UNISWAP_V2_FACTORY,
             params.tokenIn,

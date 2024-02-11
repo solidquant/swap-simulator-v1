@@ -78,7 +78,7 @@ interface ICurvePool {
 
     function withdraw_admin_fees() external;
 
-    function coins(int128 arg0) external returns (address out);
+    function _coins(int128 arg0) external returns (address out);
 
     function underlying_coins(int128 arg0) external returns (address out);
 

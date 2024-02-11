@@ -96,7 +96,7 @@ contract SimulatorV1 {
         int128 coinIdx = 0;
 
         while (i == j) {
-            address coin = pool.coins(coinIdx);
+            address coin = pool._coins(coinIdx);
 
             if (coin == params.tokenIn) {
                 i = coinIdx;

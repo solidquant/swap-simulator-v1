@@ -11,30 +11,30 @@ const SimulatorV1Address = process.env.CONTRACT_ADDRESS;
 
 async function checkContractCode(provider, contractAddress) {
   try {
-      // Fetch the code at the contract address
-      const code = await provider.getCode(contractAddress);
+    // Fetch the code at the contract address
+    const code = await provider.getCode(contractAddress);
 
-      if (code === '0x') {
-          console.log('No contract found at the provided address.');
-          return false;
-      } else {
-          console.log('Contract found.');
-          return true;
-      }
-  } catch (error) {
-      console.error('An error occurred', error);
+    if (code === "0x") {
+      console.log("No contract found at the provided address.");
       return false;
+    } else {
+      console.log("Contract found.");
+      return true;
+    }
+  } catch (error) {
+    console.error("An error occurred", error);
+    return false;
   }
 }
 
 const contract = new ethers.Contract(
   SimulatorV1Address,
   SimulatorV1ABI,
-  signer
+  signer,
 );
 
 (async () => {
-  if(!await checkContractCode(provider, SimulatorV1Address)) {
+  if (!(await checkContractCode(provider, SimulatorV1Address))) {
     return;
   }
 
